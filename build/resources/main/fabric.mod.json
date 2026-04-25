@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "id": "moblifesteal",
-  "version": "1.3",
+  "version": "1.5",
   "name": "MobLifesteal",
   "description": "If a mob atacks you, it steals your health! Regain by killing hostile mobs.",
   "authors": [],

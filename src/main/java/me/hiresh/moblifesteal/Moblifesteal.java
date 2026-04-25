@@ -25,12 +25,11 @@ public class Moblifesteal implements ModInitializer {
                 float finalDamage = DamageUtil.getDamageLeft(livingEntity, amount, damageSource, player.getArmor(), (float)player.getAttributeValue(EntityAttributes.ARMOR_TOUGHNESS));
 
                 if (player.isBlocking() && !damageSource.isIn(DamageTypeTags.BYPASSES_SHIELD)){
-
                     //Check if player is shielding against the damage
                     Vec3d srcPos = damageSource.getPosition();
                     if (srcPos != null){
                         Vec3d viewVec = player.getRotationVector();
-                        Vec3d srcVec = srcPos.subtract(player.getEntityPos().normalize());
+                        Vec3d srcVec = srcPos.subtract(player.getEntityPos()).normalize();
 
                         if (srcVec.dotProduct(viewVec) < 0.0f){
                             return true;
@@ -38,6 +37,10 @@ public class Moblifesteal implements ModInitializer {
                     }
 
                     return true; //Ignore if shielding
+                }
+
+                if (!(damageSource.getAttacker() instanceof LivingEntity)) {
+                    return true; //Handle vanilla if not a mob causing the damage
                 }
 
                 StealHearts(player, damageSource, finalDamage);
@@ -59,8 +62,10 @@ public class Moblifesteal implements ModInitializer {
             return true; //Vanilla handling given any other scenario
         }));
 
+        //If a player kills a hostile entity grant the player a heart
         ServerLivingEntityEvents.AFTER_DEATH.register((livingEntity, damageSource) -> {
             if(damageSource.getAttacker() instanceof ServerPlayerEntity player) {
+                if (!(livingEntity instanceof Monster monster)) return; //Only if hostile entity
                 GivePlayerHeart(player);
             }
         });
