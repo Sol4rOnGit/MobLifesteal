@@ -6,25 +6,57 @@ import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.mob.Monster;
+import net.minecraft.registry.tag.DamageTypeTags;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.sound.SoundEvent;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.Text;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.GameMode;
 
 public class Moblifesteal implements ModInitializer {
 
     @Override
     public void onInitialize() {
+        //If a player is damaged by the entity, grant the entity the hearts and take from the player
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(((livingEntity, damageSource, amount) -> {
             if(livingEntity instanceof ServerPlayerEntity player) {
                 float finalDamage = DamageUtil.getDamageLeft(livingEntity, amount, damageSource, player.getArmor(), (float)player.getAttributeValue(EntityAttributes.ARMOR_TOUGHNESS));
 
+                if (player.isBlocking() && !damageSource.isIn(DamageTypeTags.BYPASSES_SHIELD)){
+
+                    //Check if player is shielding against the damage
+                    Vec3d srcPos = damageSource.getPosition();
+                    if (srcPos != null){
+                        Vec3d viewVec = player.getRotationVector();
+                        Vec3d srcVec = srcPos.subtract(player.getEntityPos().normalize());
+
+                        if (srcVec.dotProduct(viewVec) < 0.0f){
+                            return true;
+                        }
+                    }
+
+                    return true; //Ignore if shielding
+                }
+
                 StealHearts(player, damageSource, finalDamage);
 
-                //Send red flash and return false (don't apply damage)
+                //Send damage flags, sound and then do not apply damage as already applied on StealHearts()
                 player.getEntityWorld().sendEntityStatus(player, (byte)2);
+                player.getEntityWorld().playSound(
+                        null,
+                        player.getX(),
+                        player.getY(),
+                        player.getZ(),
+                        SoundEvents.ENTITY_PLAYER_HURT,
+                        player.getSoundCategory(),
+                        1.0f,
+                        1.0f
+                );
                 return false;
             }
-            return true;
+            return true; //Vanilla handling given any other scenario
         }));
 
         ServerLivingEntityEvents.AFTER_DEATH.register((livingEntity, damageSource) -> {
