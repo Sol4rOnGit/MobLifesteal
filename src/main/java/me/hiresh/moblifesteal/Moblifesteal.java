@@ -2,6 +2,7 @@ package me.hiresh.moblifesteal;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.minecraft.entity.DamageUtil;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.attribute.EntityAttributes;
 import net.minecraft.entity.damage.DamageSource;
@@ -15,7 +16,13 @@ public class Moblifesteal implements ModInitializer {
     public void onInitialize() {
         ServerLivingEntityEvents.ALLOW_DAMAGE.register(((livingEntity, damageSource, amount) -> {
             if(livingEntity instanceof ServerPlayerEntity player) {
-                StealHearts(player, damageSource, amount);
+                float finalDamage = DamageUtil.getDamageLeft(livingEntity, amount, damageSource, player.getArmor(), (float)player.getAttributeValue(EntityAttributes.ARMOR_TOUGHNESS));
+
+                StealHearts(player, damageSource, finalDamage);
+
+                //Send red flash and return false (don't apply damage)
+                player.getEntityWorld().sendEntityStatus(player, (byte)2);
+                return false;
             }
             return true;
         }));
@@ -25,6 +32,8 @@ public class Moblifesteal implements ModInitializer {
                 GivePlayerHeart(player);
             }
         });
+
+
     }
 
     public void StealHearts(ServerPlayerEntity player, DamageSource damageSource, float damageAmount) {
@@ -34,6 +43,7 @@ public class Moblifesteal implements ModInitializer {
 
         //Take health from player / "ban" the player
         float currentMax = player.getMaxHealth();
+        float currentHealth = player.getHealth();
         if (currentMax < damageAmount) {
             //Set to spectator, reset health and send a message to notify them that they lost.
             player.changeGameMode(GameMode.SPECTATOR);
@@ -44,10 +54,7 @@ public class Moblifesteal implements ModInitializer {
             //Remove the hearts from max health
             playerMaxHealthAttribute.setBaseValue(currentMax - damageAmount);
 
-            //In the case this decreases the max health below the player's health, set the health to max
-            if(player.getHealth() > player.getMaxHealth()) {
-                player.setHealth(player.getMaxHealth());
-            }
+            player.setHealth(currentHealth - damageAmount);
         }
 
         //Give the lost hearts to the attacking mob

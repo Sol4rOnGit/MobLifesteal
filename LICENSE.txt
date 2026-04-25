@@ -1,2 +1,54 @@
-Copyright (c) 2026 Sol4r
-All rights reserved.
+Custom Mod License
+Copyright (c) 2026 Solar. All Rights Reserved.
+
+This license governs the use, sharing, and modification of this Minecraft mod
+("Mob Lifesteal") created by Solar. By downloading, using, or interacting with this
+Mod in any way, you agree to the following terms:
+
+════════════════════════════════════════
+1. PERMITTED USE
+════════════════════════════════════════
+
+You are allowed to:
+  - Download and play with the Mod for personal use.
+  - Include the Mod in a modpack, provided that clear credit is given to Solar
+    as the original creator, along with a link to the original download page.
+  - Modify or build upon the Mod for personal or public projects, provided that:
+      a) Clear credit is given to Solar as the original creator.
+      b) Any modified version is clearly marked as a modification and not
+         presented as the original work.
+
+════════════════════════════════════════
+2. VIDEO & CONTENT CREATION
+════════════════════════════════════════
+
+If this Mod is featured, showcased, or used in any video, stream, or other
+media content (including but not limited to YouTube, Twitch, TikTok, or similar
+platforms), you MUST:
+  - Credit Solar as the creator of the Mod visibly in the video description
+    and on-screen during the relevant segment.
+  - Provide a link to the original mod page in the video description.
+
+════════════════════════════════════════
+3. PROHIBITED ACTIONS
+════════════════════════════════════════
+
+You are NOT allowed to:
+  - Re-upload, redistribute, or mirror this Mod on any platform, website, or
+    service without explicit written permission from Solar.
+  - Claim ownership or authorship of this Mod or any substantial portion of it.
+  - Sell or monetize this Mod, in its original or modified form, without
+    explicit written permission from Solar.
+
+════════════════════════════════════════
+4. CONTACT
+════════════════════════════════════════
+
+For permissions beyond the scope of this license, or to report a violation,
+please contact Solar directly through the original mod page.
+
+════════════════════════════════════════
+
+Solar retains full ownership and copyright of this Mod at all times.
+Failure to comply with these terms may result in a DMCA takedown or other
+appropriate action.
