@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "moblifesteal",
+  "version": "1.0",
+  "name": "MobLifesteal",
+  "description": "If a mob atacks you, it steals your health! Regain by killing hostile mobs.",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/moblifesteal/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "fabric-datagen": [
+      "me.hiresh.moblifesteal.client.MoblifestealDataGenerator"
+    ],
+    "client": [
+      "me.hiresh.moblifesteal.client.MoblifestealClient"
+    ],
+    "main": [
+      "me.hiresh.moblifesteal.Moblifesteal"
+    ]
+  },
+  "mixins": [
+    "moblifesteal.mixins.json",
+    {
+      "config": "moblifesteal.client.mixins.json",
+      "environment": "client"
+    }
+  ],
+  "depends": {
+    "fabricloader": ">=0.18.1",
+    "fabric-api": "*",
+    "minecraft": "1.21.11"
+  }
+}
